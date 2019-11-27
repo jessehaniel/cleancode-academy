@@ -12,7 +12,7 @@ public interface SecretariaService {
     
     Certificado emitirCertificado(Aluno aluno, Curso curso);
     
-    void dipararMalaDireta(List<Aluno> alunoList);
+    void dispararMalaDireta(List<Aluno> alunoList);
     
     void emitirCobranca(List<Aluno> alunoList);
 }

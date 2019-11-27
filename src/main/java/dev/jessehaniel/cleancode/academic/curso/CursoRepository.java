@@ -22,7 +22,16 @@ public class CursoRepository {
     }
     
     private void init() {
-        final File file = getFile();
+        File file = null;
+        try {
+            file = ResourceUtils.getFile("classpath:cursos.csv");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (file == null) {
+            return;
+        }
+        
         try (FileReader reader = new FileReader(file);
             BufferedReader br = new BufferedReader(reader)) {
             String line;
@@ -41,12 +50,4 @@ public class CursoRepository {
         }
     }
     
-    private File getFile() {
-        try {
-            return ResourceUtils.getFile("classpath:cursos.csv");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }
