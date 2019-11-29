@@ -1,53 +1,51 @@
 package dev.jessehaniel.cleancode.academic.curso;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import dev.jessehaniel.cleancode.academic.exception.RepositoryException;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.List;
-import org.springframework.util.ResourceUtils;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 
+@Slf4j
 public class CursoRepository {
     
-    private List<Curso> cursoList = new ArrayList<Curso>();
+    private List<Curso> cursoList;
     
     public CursoRepository() {
-        init();
+        loadCursosFromFile();
     }
     
-    public List<Curso> findAll() {
-        return this.cursoList;
+    public Collection<Curso> findAll() {
+        return CollectionUtils.emptyIfNull(this.cursoList);
     }
     
-    private void init() {
-        File file = null;
-        try {
-            file = ResourceUtils.getFile("classpath:cursos.csv");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        if (file == null) {
-            return;
-        }
-        
-        try (FileReader reader = new FileReader(file);
-            BufferedReader br = new BufferedReader(reader)) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                final String[] split = line.split(",");
-                final Curso curso = new Curso();
-                curso.setNome(split[0]);
-                curso.setInstrutorNome(split[1]);
-                curso.setQtdVagas(Integer.valueOf(split[2]));
-                this.cursoList.add(curso);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+    public Optional<Curso> findFirstByNome(@NotNull String cursoNome) {
+        return this.cursoList.stream().filter(curso -> cursoNome.equals(curso.getNome())).findFirst();
+    }
+    
+    private void loadCursosFromFile() {
+        try (Stream<String> stream = Files.lines(Paths.get("classpath:cursos.csv"))) {
+            this.cursoList = stream.map(this::getCursoFromStringCsv)
+                .collect(Collectors.toList());
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RepositoryException("Erro durante a leitura do arquivo de Cursos", e);
         }
+    }
+    
+    private Curso getCursoFromStringCsv(String line) {
+        final String[] split = line.split(",");
+        final Curso curso = new Curso();
+        curso.setNome(split[0]);
+        curso.setInstrutorNome(split[1]);
+        curso.setQtdVagas(Integer.valueOf(split[2]));
+        return curso;
     }
     
 }

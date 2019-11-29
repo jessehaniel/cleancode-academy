@@ -2,26 +2,50 @@ package dev.jessehaniel.cleancode.academic.secretaria;
 
 import dev.jessehaniel.cleancode.academic.aluno.Aluno;
 import dev.jessehaniel.cleancode.academic.curso.Curso;
+import dev.jessehaniel.cleancode.academic.curso.CursoService;
+import dev.jessehaniel.cleancode.academic.curso.CursoServiceImpl;
+import dev.jessehaniel.cleancode.academic.exception.AlunoInadimplenteException;
+import dev.jessehaniel.cleancode.academic.matricula.Matricula;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class SecretariaServiceImpl implements SecretariaService {
     
+    private CursoService cursoService;
+    
+    public SecretariaServiceImpl() {
+        this(new CursoServiceImpl());
+    }
+    
+    public SecretariaServiceImpl(CursoService cursoService) {
+        this.cursoService = cursoService;
+    }
+    
     @Override
     public List<Certificado> emitirCertificadosList(Aluno aluno) {
-        return null;
+        return aluno.getMatriculaList().stream()
+            .map(Matricula::getCursoNome)
+            .map(this.cursoService::findOneByNome)
+            .map(curso -> this.emitirCertificado(aluno, curso))
+            .collect(Collectors.toList());
     }
     
     @Override
     public List<Certificado> emitirCertificadosList(Curso curso) {
-        return null;
+        //TODO lógica semelhante a emitirCertificadosList(Aluno aluno)
+        return Collections.emptyList();
     }
     
     @Override
     public Certificado emitirCertificado(Aluno aluno, Curso curso) {
-        return null;
+        if (aluno.isInadimplente()) {
+            throw new AlunoInadimplenteException("Aluno inadimplente. Não é possível emitir o Certificado.");
+        }
+        return new Certificado(aluno.getNome(), curso.getNome());
     }
     
     @Override
