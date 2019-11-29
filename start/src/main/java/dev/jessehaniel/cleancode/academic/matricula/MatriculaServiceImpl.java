@@ -14,7 +14,7 @@ public class MatriculaServiceImpl implements MatriculaService {
     public boolean matricula(Aluno aluno, Curso curso) {
         Matricula matricula = new Matricula();
         matricula.setAlunoNome(aluno.getNome());
-        matricula.setCursoNome(curso.getNome());
+        matricula.setCursoNome(curso.getCursoNome());
         
         if (!matriculaList.contains(matricula) && !aluno.isInadimplente()) {
             matriculaList.add(matricula);
@@ -26,8 +26,9 @@ public class MatriculaServiceImpl implements MatriculaService {
     
     @Override
     public List<Matricula> findAllByCurso(Curso curso) {
-        return matriculaList.stream().filter(matricula -> curso.getNome().equals(matricula.getCursoNome())).collect(
-            Collectors.toList());
+        return matriculaList.stream().filter(matricula -> curso.getCursoNome().equals(matricula.getCursoNome()))
+            .collect(
+                Collectors.toList());
     }
     
     @Override

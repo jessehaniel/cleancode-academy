@@ -15,4 +15,6 @@ public interface SecretariaService {
     void dispararMalaDireta(List<Aluno> alunoList);
     
     void emitirCobranca(List<Aluno> alunoList);
+    
+    void sendEmail(String email, String subject, String text);
 }

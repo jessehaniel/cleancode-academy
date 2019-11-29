@@ -22,6 +22,6 @@ class CursoRepositoryTest {
         //ação
         final List<Curso> cursoList = repository.findAll();
         //validação
-        assertTrue(cursoList.stream().anyMatch(curso -> nome.equals(curso.getNome())));
+        assertTrue(cursoList.stream().anyMatch(curso -> nome.equals(curso.getCursoNome())));
     }
 }

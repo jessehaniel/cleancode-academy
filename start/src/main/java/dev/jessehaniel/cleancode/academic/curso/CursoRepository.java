@@ -11,22 +11,23 @@ import org.springframework.util.ResourceUtils;
 
 public class CursoRepository {
     
-    private List<Curso> cursoList = new ArrayList<Curso>();
+    private static final String CLASSPATH_CURSOS_CSV = "classpath:cursos.csv";
+    private List<Curso> cursoList = new ArrayList<>();
     
     public CursoRepository() {
-        init();
+        carregarCursos();
     }
     
     public List<Curso> findAll() {
         return this.cursoList;
     }
     
-    private void init() {
+    private void carregarCursos() {
         File file = null;
         try {
-            file = ResourceUtils.getFile("classpath:cursos.csv");
+            file = ResourceUtils.getFile(CLASSPATH_CURSOS_CSV);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            //log
         }
         if (file == null) {
             return;
@@ -38,7 +39,7 @@ public class CursoRepository {
             while ((line = br.readLine()) != null) {
                 final String[] split = line.split(",");
                 final Curso curso = new Curso();
-                curso.setNome(split[0]);
+                curso.setCursoNome(split[0]);
                 curso.setInstrutorNome(split[1]);
                 curso.setQtdVagas(Integer.valueOf(split[2]));
                 this.cursoList.add(curso);

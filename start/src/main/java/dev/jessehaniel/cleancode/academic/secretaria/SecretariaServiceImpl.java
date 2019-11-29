@@ -36,17 +36,21 @@ public class SecretariaServiceImpl implements SecretariaService {
     @Override
     public void emitirCobranca(List<Aluno> alunoList) {
         for (Aluno aluno : alunoList) {
-            sendEmail(aluno.getNome(), aluno.getEmail(),
-                "Boleto do mês " + LocalDate.now().getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault()),
-                "Prezado aluno, informamos que o boleto deste mês já está disponível");
+            sendEmail(aluno.getEmail(),
+                "Boleto do mês " + LocalDate.now().getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault())
+                    + "/" + LocalDate.now().getYear(),
+                "Prezado " + aluno.getNome() + ", informamos que o seu boleto deste mês já está disponível.");
         }
     }
     
     private void dispararMalaDireta(Aluno aluno) {
-        sendEmail(aluno.getNome(), aluno.getEmail(), "assunto", "texto");
+        sendEmail(aluno.getEmail(), "assunto", "texto");
     }
     
-    private void sendEmail(String dest, String email, String subject, String text) {
-        //TODO
+    @Override
+    public void sendEmail(String email, String subject, String text) {
+        //TODO Implementar envio real de email
+        System.out.println(
+            String.format("De: %s\nPara: %s\nAssunto: %s\nMensagem: %s", "CleanCode", email, subject, text));
     }
 }

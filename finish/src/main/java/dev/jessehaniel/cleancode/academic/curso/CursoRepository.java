@@ -4,22 +4,22 @@ import dev.jessehaniel.cleancode.academic.exception.RepositoryException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 
-@Slf4j
 public class CursoRepository {
     
     private List<Curso> cursoList;
     
     public CursoRepository() {
-        loadCursosFromFile();
+        loadCursosFromResourceFile();
     }
     
     public Collection<Curso> findAll() {
@@ -30,7 +30,7 @@ public class CursoRepository {
         return this.cursoList.stream().filter(curso -> cursoNome.equals(curso.getNome())).findFirst();
     }
     
-    private void loadCursosFromFile() {
+    private void loadCursosFromResourceFile() {
         try (Stream<String> stream = Files.lines(Paths.get("classpath:cursos.csv"))) {
             this.cursoList = stream.map(this::getCursoFromStringCsv)
                 .collect(Collectors.toList());

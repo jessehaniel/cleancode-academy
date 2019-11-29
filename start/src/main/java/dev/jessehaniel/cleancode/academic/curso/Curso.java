@@ -4,25 +4,25 @@ import java.util.Objects;
 
 public class Curso {
     
-    private String nome;
+    private String cursoNome;
     private String instrutorNome;
     private Integer qtdVagas;
     
     public Curso() {
     }
     
-    public Curso(String nome, String instrutorNome, Integer qtdVagas) {
-        this.nome = nome;
+    public Curso(String cursoNome, String instrutorNome, Integer qtdVagas) {
+        this.cursoNome = cursoNome;
         this.instrutorNome = instrutorNome;
         this.qtdVagas = qtdVagas;
     }
     
-    public String getNome() {
-        return nome;
+    public String getCursoNome() {
+        return cursoNome;
     }
     
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setCursoNome(String cursoNome) {
+        this.cursoNome = cursoNome;
     }
     
     public String getInstrutorNome() {
@@ -50,20 +50,20 @@ public class Curso {
             return false;
         }
         Curso curso = (Curso) o;
-        return Objects.equals(nome, curso.nome) &&
+        return Objects.equals(cursoNome, curso.cursoNome) &&
             Objects.equals(instrutorNome, curso.instrutorNome) &&
             Objects.equals(qtdVagas, curso.qtdVagas);
     }
     
     @Override
     public int hashCode() {
-        return Objects.hash(nome, instrutorNome, qtdVagas);
+        return Objects.hash(cursoNome, instrutorNome, qtdVagas);
     }
     
     @Override
     public String toString() {
         return "Curso{" +
-            "nome='" + nome + '\'' +
+            "nome='" + cursoNome + '\'' +
             ", instrutorNome='" + instrutorNome + '\'' +
             ", qtdVagas=" + qtdVagas +
             '}';
