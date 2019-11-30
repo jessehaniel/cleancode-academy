@@ -6,8 +6,8 @@ public class CursoServiceImpl implements CursoService {
     
     private CursoRepository repository;
     
-    public CursoServiceImpl() {
-        this.repository = new CursoRepository();
+    public CursoServiceImpl(CursoRepository repository) {
+        this.repository = repository;
     }
     
     @Override

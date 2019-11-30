@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface MatriculaService {
     
-    boolean matricular(Aluno aluno, Curso curso);
+    Matricula matricular(Aluno aluno, Curso curso);
     
     List<Matricula> findAllByCurso(Curso curso);
     

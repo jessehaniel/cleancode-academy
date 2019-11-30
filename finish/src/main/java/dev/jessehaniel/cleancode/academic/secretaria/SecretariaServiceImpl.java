@@ -3,7 +3,6 @@ package dev.jessehaniel.cleancode.academic.secretaria;
 import dev.jessehaniel.cleancode.academic.aluno.Aluno;
 import dev.jessehaniel.cleancode.academic.curso.Curso;
 import dev.jessehaniel.cleancode.academic.curso.CursoService;
-import dev.jessehaniel.cleancode.academic.curso.CursoServiceImpl;
 import dev.jessehaniel.cleancode.academic.exception.AlunoInadimplenteException;
 import dev.jessehaniel.cleancode.academic.matricula.Matricula;
 import java.time.LocalDate;
@@ -16,10 +15,6 @@ import java.util.stream.Collectors;
 public class SecretariaServiceImpl implements SecretariaService {
     
     private CursoService cursoService;
-    
-    public SecretariaServiceImpl() {
-        this(new CursoServiceImpl());
-    }
     
     public SecretariaServiceImpl(CursoService cursoService) {
         this.cursoService = cursoService;
@@ -42,10 +37,14 @@ public class SecretariaServiceImpl implements SecretariaService {
     
     @Override
     public Certificado emitirCertificado(Aluno aluno, Curso curso) {
+        validarAlunoInadimplente(aluno);
+        return new Certificado(aluno.getNome(), curso.getNome());
+    }
+    
+    private void validarAlunoInadimplente(Aluno aluno) {
         if (aluno.isInadimplente()) {
             throw new AlunoInadimplenteException("Aluno inadimplente. Não é possível emitir o Certificado.");
         }
-        return new Certificado(aluno.getNome(), curso.getNome());
     }
     
     @Override

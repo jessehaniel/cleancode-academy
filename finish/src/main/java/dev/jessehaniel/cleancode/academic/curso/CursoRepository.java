@@ -3,10 +3,9 @@ package dev.jessehaniel.cleancode.academic.curso;
 import dev.jessehaniel.cleancode.academic.exception.RepositoryException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,6 +13,11 @@ import java.util.stream.Stream;
 import org.apache.commons.collections4.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @author jessehaniel
+ *
+ * Código refatorado segundo o Single Responsability (SOLID). Cada método faz apenas 1 coisa.
+ */
 public class CursoRepository {
     
     private List<Curso> cursoList;
@@ -31,12 +35,21 @@ public class CursoRepository {
     }
     
     private void loadCursosFromResourceFile() {
-        try (Stream<String> stream = Files.lines(Paths.get("classpath:cursos.csv"))) {
-            this.cursoList = stream.map(this::getCursoFromStringCsv)
-                .collect(Collectors.toList());
+        try (Stream<String> stream = Files.lines(getCsvPath())) {
+            convertInputLineToCursoList(stream);
         } catch (IOException e) {
             throw new RepositoryException("Erro durante a leitura do arquivo de Cursos", e);
         }
+    }
+    
+    private void convertInputLineToCursoList(Stream<String> stream) {
+        this.cursoList = stream.map(this::getCursoFromStringCsv)
+            .collect(Collectors.toList());
+    }
+    
+    @NotNull
+    private Path getCsvPath() {
+        return Paths.get("src/main/resources/cursos.csv");
     }
     
     private Curso getCursoFromStringCsv(String line) {
