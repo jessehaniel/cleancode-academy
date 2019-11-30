@@ -11,21 +11,20 @@ import org.springframework.util.ResourceUtils;
 
 public class CursoRepository {
     
-    private static final String CLASSPATH_CURSOS_CSV = "classpath:cursos.csv";
     private List<Curso> cursoList = new ArrayList<>();
     
     public CursoRepository() {
-        carregarCursos();
+        init();
     }
     
     public List<Curso> findAll() {
         return this.cursoList;
     }
     
-    private void carregarCursos() {
+    private void init() {
         File file = null;
         try {
-            file = ResourceUtils.getFile(CLASSPATH_CURSOS_CSV);
+            file = ResourceUtils.getFile("classpath:cursos.csv");
         } catch (FileNotFoundException e) {
             //log
         }
